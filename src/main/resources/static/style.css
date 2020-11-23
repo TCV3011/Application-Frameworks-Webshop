@@ -1,0 +1,13 @@
+.container {
+    max-width: 80%;
+}
+.jumbotron {
+    margin: 0;
+}
+.navbar {
+    padding: .5rem 0 !important;
+}
+
+h2 {
+    margin: 3rem 0 1rem 0;
+}
