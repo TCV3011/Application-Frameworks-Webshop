@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Entity
+@Entity(name = "categories")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

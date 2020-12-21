@@ -47,14 +47,14 @@ class Filter extends Component {
   render = () => {
     return (
       <div className='form-group'>
-        <label htmlFor='filter'>Filter by category</label>
+        <label htmlFor='filter'>Filter the products by category</label>
         <select
           className='form-control'
           id='filter'
           name={'category'}
           onChange={this.handleInputChange}
         >
-          <option>None</option>
+          <option>All</option>
           {this.state.Categories.map((category, index) => {
             return (
               <option key={category.id} value={category.name}>

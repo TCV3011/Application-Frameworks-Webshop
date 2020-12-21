@@ -6,13 +6,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Entity
+@Entity(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @Size(min = 4, max = 20, message = "Name should be between 4 and 20 characters long.")
+    @Size(min = 4, max = 40, message = "Name should be between 4 and 20 characters long.")
     private String name;
 
     @NotBlank(message = "Description cannot be empty")
@@ -21,10 +21,14 @@ public class Product {
     @NotBlank(message = "Price cannot be empty")
     private double price;
 
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "product_categ", nullable = false)
     @JsonIgnore
     private Category category;
+
+    private int amount;
 
     public Product() {
     }
@@ -61,11 +65,27 @@ public class Product {
         this.price = price;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 }
