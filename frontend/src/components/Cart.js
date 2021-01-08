@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import DeleteFromCart from './DeleteFromCart'
 
 class Cart extends Component {
   constructor(props) {
@@ -7,10 +8,27 @@ class Cart extends Component {
       SelectedProducts: props.products,
       TotalPrice: 0
     }
+    this.handleInputChange = this.handleInputChange.bind(this)
+  }
+
+  handleInputChange(event) {
+    const target = event.target
+    const value = target.value
+    const name = target.name
+
+    this.setState({
+      [name]: value
+    })
   }
 
   componentDidMount = () => {
-    console.log('cart componentDidMount')
+    console.log(this.state.SelectedProducts)
+  }
+
+  deleteProduct = (index) => {
+    console.log(index)
+    this.state.SelectedProducts.splice(index, 1)
+    this.setState({})
   }
 
   render = () => {
@@ -22,7 +40,7 @@ class Cart extends Component {
         aria-labelledby='cartModalLabel'
         aria-hidden='true'
       >
-        <div className='modal-dialog modal-dialog-centered modal-lg'>
+        <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg'>
           <div className='modal-content'>
             <div className='modal-header'>
               <h5 className='modal-title' id='cartModalLabel'>
@@ -52,15 +70,24 @@ class Cart extends Component {
                     return (
                       <tr key={index}>
                         <td>{product.product.name}</td>
-                        <td>x{product.amount}</td>
                         <td>
-                          €{' '}
-                          {(product.product.price * product.amount).toFixed(2)}
+                          <input
+                            type='number'
+                            min='1'
+                            max={product.product.amount}
+                            placeholder='1'
+                            name={'amount' + index}
+                            value={this.state['amount' + index]}
+                            onChange={this.handleInputChange}
+                            required
+                          />
                         </td>
+                        <td>€</td>
                         <td>
-                          <button type='button' className='btn btn-danger'>
-                            Delete
-                          </button>
+                          <DeleteFromCart
+                            currentProd={index}
+                            onSubmit={this.deleteProduct}
+                          />
                         </td>
                       </tr>
                     )
@@ -69,7 +96,7 @@ class Cart extends Component {
                 <tfoot className='tfoot'>
                   <tr>
                     <td colSpan='4'>
-                      <strong>Total price: €</strong>
+                      <strong>Total price: € {this.state.TotalPrice}</strong>
                     </td>
                   </tr>
                 </tfoot>

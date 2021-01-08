@@ -1,42 +1,44 @@
 import './App.css'
 import React, { Component } from 'react'
-import Products from './components/Products'
-import Navbar from './components/Navbar'
-import Intro from './components/Intro'
-import Cart from './components/Cart'
+import Auth from './auth/Auth'
+import { Route, Redirect } from 'react-router-dom'
+import Home from './components/Home'
+import Callback from './components/Callback'
+import Profile from './components/Profile'
 
-function App() {
-  return <HeadComponent />
-}
-
-class HeadComponent extends Component {
+class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      CartProducts: []
+      auth: new Auth(this.props.history)
     }
   }
-  AddToCart = (product) => {
-    console.log('testing add to cart')
-    console.log(product)
-    this.state.CartProducts.push(product)
-    console.log(this.state.CartProducts)
-    this.child.setState({ SelectedProducts: this.state.CartProducts })
-  }
+
   render() {
     return (
-      <div className='App'>
-        <Navbar />
-        <Intro />
-        <div className='container'>
-          <Products addToCart={this.AddToCart} />
+      <>
+        <div className='App'>
+          <Route
+            path='/'
+            exact
+            render={(props) => <Home auth={this.state.auth} {...props} />}
+          />
+          <Route
+            path='/callback'
+            render={(props) => <Callback auth={this.state.auth} {...props} />}
+          />
+          <Route
+            path='/profile'
+            render={(props) =>
+              this.state.auth.isAuthenticated() ? (
+                <Profile auth={this.state.auth} {...props} />
+              ) : (
+                <Redirect to='/' />
+              )
+            }
+          />
         </div>
-        <Cart
-          ref={(ref) => (this.child = ref)}
-          products={this.state.CartProducts}
-          setState={(state) => this.setState(state)}
-        />
-      </div>
+      </>
     )
   }
 }

@@ -68,7 +68,6 @@ class Products extends Component {
             return (
               <div className='col-md-4 mt-4' key={product.id}>
                 <div className='card d-flex flex-column h-100'>
-                  <div className='price'>€ {product.price}</div>
                   <img
                     src={product.image}
                     className='card-img-top'
@@ -77,11 +76,7 @@ class Products extends Component {
                   <div className='card-body d-flex flex-column'>
                     <h5 className='card-title'>{product.name}</h5>
                     <p className='card-text'>{product.description}</p>
-                    <AddToCart
-                      product={product}
-                      amount={product.amount}
-                      onSubmit={this.addProduct}
-                    />
+                    <AddToCart product={product} onSubmit={this.addProduct} />
                   </div>
                 </div>
               </div>

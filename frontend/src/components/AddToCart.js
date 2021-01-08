@@ -5,19 +5,8 @@ class AddToCart extends Component {
     super(props)
     this.state = {
       currentProd: this.props.product,
-      amount: 1,
-      maxAmount: this.props.amount
+      amount: 1
     }
-    this.handleInputChange = this.handleInputChange.bind(this)
-  }
-  handleInputChange(event) {
-    const target = event.target
-    const value = target.value
-    const name = target.name
-
-    this.setState({
-      [name]: value
-    })
   }
 
   submitHandler = () => {
@@ -30,20 +19,19 @@ class AddToCart extends Component {
   render() {
     return (
       <div className='btn-group mt-auto'>
-        <input
-          type='number'
-          min='1'
-          max={this.state.maxAmount}
-          placeholder='1'
-          name='amount'
-          value={this.state.amount}
-          onChange={this.handleInputChange}
-          required
-        />
+        <button
+          disabled
+          type='button'
+          className='btn btn-sm btn-outline-secondary'
+        >
+          € {this.state.currentProd.price}
+        </button>
         <button
           type='button'
           className='btn btn-sm btn-outline-secondary'
           onClick={this.submitHandler}
+          data-toggle='modal'
+          data-target='#cartModal'
         >
           Add to cart
         </button>
