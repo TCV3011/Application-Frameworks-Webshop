@@ -11,7 +11,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    private String name;
+    private String email;
+
+    private String products;
+
+    private Double price;
 
     public Order() {}
 
@@ -23,11 +27,27 @@ public class Order {
         Id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getProducts() {
+        return products;
+    }
+
+    public void setProducts(String products) {
+        this.products = products;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

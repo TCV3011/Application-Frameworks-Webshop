@@ -5,6 +5,7 @@ import { Route, Redirect } from 'react-router-dom'
 import Home from './components/Home'
 import Callback from './components/Callback'
 import Profile from './components/Profile'
+import Checkout from './components/Checkout'
 
 class App extends Component {
   constructor(props) {
@@ -32,6 +33,16 @@ class App extends Component {
             render={(props) =>
               this.state.auth.isAuthenticated() ? (
                 <Profile auth={this.state.auth} {...props} />
+              ) : (
+                <Redirect to='/' />
+              )
+            }
+          />
+          <Route
+            path='/checkout'
+            render={(props) =>
+              this.state.auth.isAuthenticated() ? (
+                <Checkout auth={this.state.auth} {...props} />
               ) : (
                 <Redirect to='/' />
               )

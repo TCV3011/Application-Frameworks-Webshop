@@ -1,8 +1,10 @@
 package be.ehb.backend.controller;
 
 import be.ehb.backend.dao.CategoryDAO;
+import be.ehb.backend.dao.OrderDAO;
 import be.ehb.backend.dao.ProductDAO;
 import be.ehb.backend.model.Category;
+import be.ehb.backend.model.Order;
 import be.ehb.backend.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,13 @@ import java.util.ArrayList;
 public class ApiController {
     private final ProductDAO productDAO;
     private final CategoryDAO categoryDAO;
+    private final OrderDAO orderDAO;
 
     @Autowired
-    public ApiController(ProductDAO productDAO, CategoryDAO categoryDAO) {
+    public ApiController(ProductDAO productDAO, CategoryDAO categoryDAO, OrderDAO orderDAO) {
         this.productDAO = productDAO;
         this.categoryDAO = categoryDAO;
+        this.orderDAO = orderDAO;
     }
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/products", method = RequestMethod.GET)
@@ -38,6 +42,25 @@ public class ApiController {
     @ResponseBody
     public Iterable<Category> getAllCategories() {
         return categoryDAO.findAll();
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/orders?email={email}", method = RequestMethod.GET)
+    @ResponseBody
+    public Iterable<Order> getAllOrdersByEmail(@RequestParam(name = "email") String email) {
+        return orderDAO.findAllByEmail(email);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/orders?email={email}&products={products}&price={price}", method = RequestMethod.POST)
+    @ResponseBody
+    public HttpStatus addOrder(@RequestParam(name = "email") String email, @RequestParam(name = "products") String products, @RequestParam(name = "price") Double price) {
+        Order order = new Order();
+        order.setEmail(email);
+        order.setProducts(products);
+        order.setPrice(price);
+        orderDAO.save(order);
+        return HttpStatus.CREATED;
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

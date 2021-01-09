@@ -10,7 +10,7 @@ class Cart extends Component {
         ? JSON.parse(localStorage.getItem('cart'))
         : [],
       TotalPrice: localStorage.getItem('total_price')
-        ? parseFloat(localStorage.getItem('total_price'))
+        ? parseFloat(localStorage.getItem('total_price')).toFixed(2)
         : 0,
       auth: props.auth
     }
@@ -69,6 +69,10 @@ class Cart extends Component {
       (localStorage.getItem('total_price') - tempPPP).toFixed(2)
     )
     this.setState({})
+  }
+
+  toCheckout = () => {
+    window.location.href = window.location.href + 'checkout'
   }
 
   render = () => {
@@ -162,13 +166,13 @@ class Cart extends Component {
                   Close
                 </button>
                 {isAuthenticated() ? (
-                  <Link
-                    to='/checkout'
+                  <button
                     type='button'
+                    data-dismiss='modal'
                     className='btn btn-outline-secondary'
-                    data-dismiss='modal'>
+                    onClick={this.toCheckout}>
                     Checkout
-                  </Link>
+                  </button>
                 ) : (
                   <button
                     type='button'
