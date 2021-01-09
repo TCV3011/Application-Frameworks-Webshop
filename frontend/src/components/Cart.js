@@ -61,8 +61,14 @@ class Cart extends Component {
   }
 
   deleteProduct = (index) => {
-    console.log(index)
+    const tempPPP = this.state.SelectedProducts[index].ppp
     this.state.SelectedProducts.splice(index, 1)
+    localStorage.setItem('cart', JSON.stringify(this.state.SelectedProducts))
+    localStorage.setItem(
+      'total_price',
+      (localStorage.getItem('total_price') - tempPPP).toFixed(2)
+    )
+    this.setState({})
   }
 
   render = () => {
