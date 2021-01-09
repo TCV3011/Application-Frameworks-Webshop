@@ -52,6 +52,11 @@ class Home extends Component {
     localStorage.setItem('cart', JSON.stringify(a))
   }
 
+  /**
+   * Code below is based on https://linguinecode.com/post/get-child-component-state-from-parent-component
+   * Used to access the state of child component
+   */
+
   render() {
     return (
       <div>

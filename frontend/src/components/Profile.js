@@ -10,6 +10,10 @@ class Profile extends Component {
   componentDidMount = () => {
     this.loadUserProfileAndOrders()
   }
+  /**
+   * Load the users profile by calling the auth in the props of the component.
+   * Load the orders by the user's email when the user is logged in
+   */
   loadUserProfileAndOrders = () => {
     this.props.auth.getProfile((profile, error) => {
       console.log(`email to fetch ${profile.email}`)

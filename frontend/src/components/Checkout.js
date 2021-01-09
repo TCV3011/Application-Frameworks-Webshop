@@ -19,7 +19,11 @@ class Checkout extends Component {
       this.setState({ profile, error })
     })
   }
-
+  /**
+   * Make an order by using fetch to talk to the api
+   * Get email from profile, products is a string of the products, name and amount in the localStorage cart
+   * The price is the total price of the cart
+   */
   makeOrder = () => {
     const email = this.state.profile.email
     let products = ''

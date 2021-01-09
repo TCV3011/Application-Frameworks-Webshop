@@ -22,10 +22,12 @@ class Cart extends Component {
     const value = target.value
     const name = target.name
 
+    // Get id from variable name of input -> format: amountX -> x = number
     let key = parseInt(name.replace('amount', ''))
     let alteredValue = parseInt(value)
     this.setState(
       (prevState) => ({
+        // Change the amount based on inputChange and calculate the ppp -> price per product
         SelectedProducts: prevState.SelectedProducts.map((el, index) =>
           index === key
             ? {
@@ -46,11 +48,13 @@ class Cart extends Component {
           'cart',
           JSON.stringify(this.state.SelectedProducts)
         )
+        // Calculate price based on the sum of all the ppp's in the cart
         let tempTotalPrice = 0
         for (const cp of JSON.parse(localStorage.getItem('cart'))) {
           tempTotalPrice += parseFloat(cp.ppp)
         }
         localStorage.setItem('total_price', tempTotalPrice.toFixed(2))
+        // Refresh component
         this.setState({})
       }
     )
@@ -60,6 +64,9 @@ class Cart extends Component {
     console.log(this.state.SelectedProducts)
   }
 
+  /**
+   * Delete a product from the cart by its id and update the total price
+   */
   deleteProduct = (index) => {
     const tempPPP = this.state.SelectedProducts[index].ppp
     this.state.SelectedProducts.splice(index, 1)
@@ -71,6 +78,9 @@ class Cart extends Component {
     this.setState({})
   }
 
+  /**
+   * Choice of using a function because if I used a link, the modal wouldn't disappear
+   */
   toCheckout = () => {
     window.location.href = window.location.href + 'checkout'
   }
