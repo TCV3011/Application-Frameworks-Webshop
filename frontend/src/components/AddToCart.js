@@ -14,6 +14,7 @@ class AddToCart extends Component {
       product: this.state.currentProd,
       amount: this.state.amount
     }
+    tempProd.ppp = tempProd.product.price * tempProd.amount
     this.props.onSubmit(tempProd)
   }
   render() {
@@ -22,8 +23,7 @@ class AddToCart extends Component {
         <button
           disabled
           type='button'
-          className='btn btn-sm btn-outline-secondary'
-        >
+          className='btn btn-sm btn-outline-secondary'>
           € {this.state.currentProd.price}
         </button>
         <button
@@ -31,8 +31,7 @@ class AddToCart extends Component {
           className='btn btn-sm btn-outline-secondary'
           onClick={this.submitHandler}
           data-toggle='modal'
-          data-target='#cartModal'
-        >
+          data-target='#cartModal'>
           Add to cart
         </button>
       </div>

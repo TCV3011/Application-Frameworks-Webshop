@@ -8,29 +8,48 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      auth: props.auth,
-      CartProducts: []
+      auth: props.auth
     }
   }
   AddToCart = (product) => {
-    console.log('testing add to cart')
-    console.log(product)
     let isInCart = false
-    for (const cp of this.state.CartProducts) {
-      if (product.product.name === cp.product.name) {
-        // product already in cart
-        isInCart = true
+    if (localStorage.getItem('cart')) {
+      for (const cp of JSON.parse(localStorage.getItem('cart'))) {
+        if (product.product.name === cp.product.name) {
+          // product already in cart
+          isInCart = true
+        }
       }
     }
     if (isInCart === false) {
-      this.state.CartProducts.push(product)
+      this.saveProductToLocalStorageCart(product)
+      console.log(`product price: ${product.product.price}`)
+      let tempTotalPrice = localStorage.getItem('total_price')
+        ? parseFloat(localStorage.getItem('total_price')) +
+          product.product.price
+        : 0 + product.product.price
+      localStorage.setItem('total_price', tempTotalPrice)
     }
 
-    console.log(this.state.CartProducts)
-    // localStorage.setItem('cartProducts', this.state.CartProducts)
     this.child.setState({
-      SelectedProducts: this.state.CartProducts
+      SelectedProducts: JSON.parse(localStorage.getItem('cart'))
     })
+  }
+
+  /**
+   * Code below is based on https://stackoverflow.com/questions/16083919/push-json-objects-to-array-in-localstorage
+   * Used to put JSON object in to array in local storage
+   * Consulted on 08/01/2021
+   */
+
+  saveProductToLocalStorageCart = (product) => {
+    var a = []
+    // Parse the serialized data back into an array of objects
+    a = JSON.parse(localStorage.getItem('cart')) || []
+    // Push the new data (whether it be an object or anything else) onto the array
+    a.push(product)
+    // Re-serialize the array back into a string and store it in localStorage
+    localStorage.setItem('cart', JSON.stringify(a))
   }
 
   render() {
@@ -43,8 +62,8 @@ class Home extends Component {
         </div>
         <Cart
           ref={(ref) => (this.child = ref)}
-          products={this.state.CartProducts}
           setState={(state) => this.setState(state)}
+          auth={this.state.auth}
         />
       </div>
     )
