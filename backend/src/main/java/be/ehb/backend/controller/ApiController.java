@@ -12,8 +12,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-
 @Controller
 @RequestMapping("/api")
 public class ApiController {
@@ -27,6 +25,7 @@ public class ApiController {
         this.categoryDAO = categoryDAO;
         this.orderDAO = orderDAO;
     }
+
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     @ResponseBody
@@ -45,30 +44,35 @@ public class ApiController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @RequestMapping(value = "/orders?email={email}", method = RequestMethod.GET)
+    @RequestMapping(value = "/orders", method = RequestMethod.GET)
     @ResponseBody
     public Iterable<Order> getAllOrdersByEmail(@RequestParam(name = "email") String email) {
         return orderDAO.findAllByEmail(email);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @RequestMapping(value = "/orders?email={email}&products={products}&price={price}", method = RequestMethod.POST)
+    @RequestMapping(value = "/orders", method = RequestMethod.POST)
     @ResponseBody
-    public HttpStatus addOrder(@RequestParam(name = "email") String email, @RequestParam(name = "products") String products, @RequestParam(name = "price") Double price) {
+    public HttpStatus addOrder(@RequestParam(name = "email") String email, @RequestParam(name = "price") String price, @RequestParam(name = "products") String products) {
         Order order = new Order();
         order.setEmail(email);
         order.setProducts(products);
-        order.setPrice(price);
+        order.setPrice(Double.parseDouble(price));
         orderDAO.save(order);
         return HttpStatus.CREATED;
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @RequestMapping(value = "/products/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public HttpStatus deleteCourseById(@PathVariable(name = "id") int id) {
-        if (productDAO.existsById(id)) {
-            productDAO.deleteById(id);
+    public HttpStatus subtractProductAmountById(@PathVariable("id") String id, @RequestParam(name = "amount") int amount) {
+        int intID = Integer.parseInt(id);
+        if (productDAO.existsById(intID)) {
+            var product = productDAO.findById(intID);
+            Product newProduct = product.get();
+            int newAmount = newProduct.getAmount() - amount;
+            newProduct.setAmount(newAmount);
+            productDAO.save(newProduct);
             return HttpStatus.OK;
         }
         return HttpStatus.NOT_FOUND;

@@ -15,10 +15,8 @@ public class Product {
     @Size(min = 4, max = 40, message = "Name should be between 4 and 20 characters long.")
     private String name;
 
-    @NotBlank(message = "Description cannot be empty")
     private String description;
 
-    @NotBlank(message = "Price cannot be empty")
     private double price;
 
     private String image;

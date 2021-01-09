@@ -34,17 +34,51 @@ class Checkout extends Component {
       {
         method: 'POST',
         headers: {
+          'Content-Type': 'x-www-form-url-encoded',
           accept: 'application/json'
         }
       }
     )
       .then((res) => {
-        if (res.ok) return res.json()
-        console.log(`error: ${res}`)
+        if (res.ok) {
+          console.log(`create order response: ${res.status}`)
+          return res.json()
+        }
+        console.log(`create order error: ${res.statusText}`)
       })
       .then((json) => {
-        console.log(`orders: ${json}`)
-        this.setState({ orders: json })
+        console.log(`product created, got: ${JSON.stringify(json)}`)
+        for (const cp of JSON.parse(localStorage.getItem('cart'))) {
+          fetch(
+            `http://localhost:8080/api/products/${cp.product.id}?amount=${cp.amount}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'x-www-form-url-encoded',
+                accept: 'application/json'
+              }
+            }
+          )
+            .then((res) => {
+              if (res.ok) {
+                console.log(`amount updated response: ${res.status}`)
+                return res.json()
+              }
+              console.log(`amount updated error: ${res.statusText}`)
+            })
+            .then((json) => {
+              console.log(`amount updated, got: ${JSON.stringify(json)}`)
+              localStorage.removeItem('cart')
+              localStorage.removeItem('total_price')
+              window.location.href = window.location.href.replace(
+                'checkout',
+                ''
+              )
+            })
+            .catch((err) => {
+              console.log(`error: ${err}`)
+            })
+        }
       })
       .catch((err) => {
         console.log(`error: ${err}`)

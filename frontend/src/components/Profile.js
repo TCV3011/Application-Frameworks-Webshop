@@ -12,7 +12,8 @@ class Profile extends Component {
   }
   loadUserProfileAndOrders = () => {
     this.props.auth.getProfile((profile, error) => {
-      fetch(`http://localhost:8080/api/orders/${profile.email}`, {
+      console.log(`email to fetch ${profile.email}`)
+      fetch(`http://localhost:8080/api/orders?email=${profile.email}`, {
         method: 'GET',
         headers: {
           accept: 'application/json'
@@ -25,11 +26,12 @@ class Profile extends Component {
         .then((json) => {
           console.log(`orders: ${json}`)
           this.setState({ orders: json })
+          console.log(this.state.orders)
+          this.setState({ profile, error })
         })
         .catch((err) => {
           console.log(`error: ${err}`)
         })
-      this.setState({ profile, error })
     })
   }
   render() {
@@ -69,7 +71,11 @@ class Profile extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.orders === [] ? (
+                    {this.state.orders.length === 0 ? (
+                      <tr>
+                        <td colSpan='3'>You don't have any orders yet.</td>
+                      </tr>
+                    ) : (
                       this.state.orders.map((order, index) => {
                         return (
                           <tr key={index}>
@@ -79,10 +85,6 @@ class Profile extends Component {
                           </tr>
                         )
                       })
-                    ) : (
-                      <tr>
-                        <td colSpan='3'>You don't have any orders yet.</td>
-                      </tr>
                     )}
                   </tbody>
                 </table>
